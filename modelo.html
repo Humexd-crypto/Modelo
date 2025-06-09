@@ -2,38 +2,84 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Modelo Integrador</title>
+  <title>Modelo Integrado en Genially</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       background: transparent;
       font-family: sans-serif;
-      color: black;
-      margin: 0;
-      padding: 10px;
     }
-    #palabra {
-      font-size: 2em;
-      margin-top: 20px;
+    #contenedor {
+      padding: 10px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     #pista {
+      font-size: 18px;
       font-style: italic;
       margin-top: 10px;
+      color: black;
+    }
+    #palabra {
+      font-size: 32px;
+      letter-spacing: 8px;
+      margin: 20px;
+      color: black;
+    }
+    #mensajeFinal {
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 20px;
+      color: red;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div id="pista"></div>
-  <div id="palabra"></div>
+<div id="contenedor">
+  <div id="pista">Pista:</div>
+  <div id="palabra">_ _ _ _ _ _</div>
+  <div id="mensajeFinal"></div>
+</div>
+<script src="base_palabras.js"></script>
+<script>
+  const palabraElement = document.getElementById("palabra");
+  const pistaElement = document.getElementById("pista");
+  const mensajeElement = document.getElementById("mensajeFinal");
 
-  <script src="base_palabras.js"></script>
-  <script>
-    // Elegir palabra aleatoria de la base
-    const elegida = palabras[Math.floor(Math.random() * palabras.length)];
-    const pistaInicial = elegida.pistas[0];
-    const palabraOculta = elegida.palabra.replace(/./g, "_ ");
+  const palabraActual = palabras[Math.floor(Math.random() * palabras.length)];
+  const palabra = palabraActual.palabra.toUpperCase();
+  const pistas = palabraActual.pistas;
 
-    document.getElementById("pista").textContent = "Pista: " + pistaInicial;
-    document.getElementById("palabra").textContent = palabraOculta;
-  </script>
+  let errores = 0;
+  const maxErrores = 4;
+  let progreso = Array(palabra.length).fill("_");
+
+  // Mostrar pista desde el inicio
+  pistaElement.innerText = "Pista: " + pistas[0];
+  palabraElement.innerText = progreso.join(" ");
+
+  // Simulación de error y victoria (puedes controlar externamente)
+  function simularError() {
+    errores++;
+    if (errores === maxErrores) {
+      mensajeElement.style.display = "block";
+      mensajeElement.innerText = "El ciudadano perdió sus ahorros. La palabra era: " + palabra;
+    }
+  }
+
+  function simularVictoria() {
+    mensajeElement.style.display = "block";
+    mensajeElement.style.color = "green";
+    mensajeElement.innerText = "¡Has salvado los ahorros del ciudadano!";
+  }
+
+  // Exportar funciones
+  window.simularError = simularError;
+  window.simularVictoria = simularVictoria;
+</script>
 </body>
 </html>
